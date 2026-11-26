@@ -1,0 +1,144 @@
+---
+import { getImage, Picture } from 'astro:assets';
+import closeUp from '../assets/sauna-z-bliska-korekta.png';
+import interior from '../assets/wnetrze-proba-lagodniejsza.png';
+import fire from '../assets/ogien-w-piecu-korekta.png';
+import trailer from '../assets/sauna-z-dowozem-refleks.png';
+
+const photos = await Promise.all([
+  { src: closeUp, alt: 'Drewniana sauna z bliska', wide: true },
+  { src: interior, alt: 'Drewniane ławki po obu stronach sauny i piec pośrodku' },
+  { src: fire, alt: 'Płomień w piecu sauny' },
+  { src: trailer, alt: 'Sauna na przyczepie nad zatoką', wide: true },
+].map(async (photo) => ({
+  ...photo,
+  full: await getImage({ src: photo.src, format: 'webp', width: Math.min(1280, photo.src.width) }),
+})));
+---
+
+<section class="gallery frame" id="galeria" aria-labelledby="gallery-title">
+  <h2 id="gallery-title">Galeria</h2>
+  <div class="gallery-grid">
+    {photos.map((photo) => (
+      <a class:list={['photo-link', { 'photo-wide': photo.wide }]} href={photo.full.src}
+        aria-label={`Powiększ zdjęcie: ${photo.alt}`}>
+        <Picture src={photo.src} formats={['webp']} fallbackFormat="jpg" width={Math.min(1200, photo.src.width)}
+          widths={[320, 560, 800, 1200].filter((width) => width <= photo.src.width)}
+          sizes={photo.wide ? '(max-width: 1200px) 67vw, 800px' : '(max-width: 1200px) 33vw, 400px'} alt={photo.alt} />
+      </a>
+    ))}
+  </div>
+
+  <dialog class="photo-dialog" aria-label="Powiększone zdjęcie">
+    <button class="photo-dismiss" type="button" aria-label="Zamknij podgląd zdjęcia" autofocus>
+      <span class="photo-preview"></span>
+    </button>
+    <button class="photo-nav photo-prev" type="button" aria-label="Poprzednie zdjęcie">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+    </button>
+    <button class="photo-nav photo-next" type="button" aria-label="Następne zdjęcie">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+    </button>
+  </dialog>
+</section>
+
+<script is:inline>
+  (() => {
+    const gallery = document.getElementById('galeria');
+    const dialog = gallery.querySelector('.photo-dialog');
+    const preview = dialog.querySelector('.photo-preview');
+    const links = [...gallery.querySelectorAll('.photo-link')];
+    let activeIndex = 0;
+    let opener;
+
+    function showPhoto(index) {
+      activeIndex = (index + links.length) % links.length;
+      const link = links[activeIndex];
+      const image = new Image();
+      image.alt = link.querySelector('img').alt;
+      image.draggable = false;
+      image.src = link.href;
+      preview.replaceChildren(image);
+    }
+
+    links.forEach((link, index) => {
+      link.addEventListener('click', (event) => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        opener = link;
+        showPhoto(index);
+        dialog.showModal();
+      });
+    });
+    dialog.querySelector('.photo-dismiss').addEventListener('click', () => dialog.close());
+    dialog.querySelector('.photo-prev').addEventListener('click', () => showPhoto(activeIndex - 1));
+    dialog.querySelector('.photo-next').addEventListener('click', () => showPhoto(activeIndex + 1));
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        showPhoto(activeIndex + (event.key === 'ArrowLeft' ? -1 : 1));
+      }
+    });
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('close', () => {
+      if (!dialog.open) opener?.focus({ preventScroll: true });
+    });
+  })();
+</script>
+
+<style>
+  .gallery { padding-block: clamp(3rem, 6vw, 6rem); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(.45rem, 1.1vw, 1rem);
+    margin-top: 1.5rem;
+  }
+  .photo-link { position: relative; display: block; align-self: stretch; min-height: 0; overflow: hidden; aspect-ratio: 3 / 4; background: #c8d3d8; cursor: zoom-in; }
+  .photo-wide { grid-column: span 2; aspect-ratio: 3 / 2; }
+  .photo-link picture { position: absolute; inset: 0; display: block; }
+  .photo-link img { transition: transform .18s ease-out; }
+  @media (hover: hover) {
+    .photo-link:hover img { transform: scale(1.035); }
+  }
+  .photo-dialog {
+    width: min(calc(100% - 1rem), 70rem);
+    max-width: none;
+    max-height: calc(100% - 1rem);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .photo-dialog::backdrop { background: #111a16d9; }
+  .photo-dismiss { display: block; width: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-out; }
+  .photo-preview { display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; height: min(85dvh, 48rem); }
+  .photo-preview :global(img) { width: auto; max-width: 100%; height: auto; max-height: min(85dvh, 48rem); object-fit: contain; }
+  .photo-nav {
+    position: absolute;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid #f7f3eb80;
+    border-radius: 50%;
+    background: #111a16e6;
+    color: var(--paper);
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  .photo-prev { left: .25rem; }
+  .photo-next { right: .25rem; }
+  .photo-nav svg { width: 1.25rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo-link img { transition: none; }
+  }
+</style>

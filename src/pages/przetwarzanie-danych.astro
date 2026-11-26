@@ -1,0 +1,29 @@
+---
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/manrope';
+import '../styles.css';
+
+
+const owner = Astro.site ? import.meta.env.BOOKING_OWNER?.trim() : '[imię i nazwisko]';
+if (!owner) throw new Error('Set BOOKING_OWNER to the name of the person or business responsible for booking data.');
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {!Astro.site && <meta name="robots" content="noindex" />}
+    <title>Dane przy rezerwacji · Mobilne Saunowanie</title>
+  </head>
+  <body>
+    <main class="frame simple-page">
+      <h1>Dane przy rezerwacji</h1>
+      <p>Za dane podane przy rezerwacji odpowiada {owner}, właściciel sauny. Jeśli masz pytanie o swoje dane, <a href="/#kontakt">zadzwoń do właściciela</a>.</p>
+      <p>Dane są potrzebne, żeby ustalić termin i dowieźć saunę pod wskazany adres. Podajesz je dobrowolnie. Bez nich nie da się zrealizować rezerwacji z dowozem. Dane służą do uzgodnienia wynajmu na Twoją prośbę i wykonania umowy (art. 6 ust. 1 lit. b RODO).</p>
+      <p>Właściciel nikomu nie przekazuje danych z rezerwacji i usuwa notatki po wykonaniu zlecenia.</p>
+      <p>Możesz poprosić o dostęp do swoich danych, ich poprawienie, usunięcie, ograniczenie ich wykorzystania lub przeniesienie na zasadach określonych w RODO. Możesz też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych.</p>
+      <a class="button" href="/">Wróć na stronę główną</a>
+    </main>
+  </body>
+</html>
