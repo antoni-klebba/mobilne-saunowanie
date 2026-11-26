@@ -65,8 +65,8 @@ const rentalPrices = [
         <Image src={logo} width={144} format="png" loading="eager" alt="" />
       </a>
       <nav aria-label="Menu główne">
-        <a href="#oferta">Oferta</a>
-        <a href="#galeria">Galeria</a>
+        <a class="nav-section" href="#oferta">Oferta</a>
+        <a class="nav-section" href="#galeria">Galeria</a>
         <a class="nav-contact" href="#kontakt">Kontakt</a>
         <ProfileLinks />
       </nav>
@@ -78,7 +78,10 @@ const rentalPrices = [
           <p class="eyebrow"><span class="rule" aria-hidden="true"></span>Swarzewo i okolice</p>
           <h1 id="hero-title">Mobilna sauna <em>z dowozem.</em></h1>
           <p class="hero-description">Wynajmij saunę na wieczór lub weekend. Dowozimy do Swarzewa, Pucka, Władysławowa i okolic, a piec rozpalamy na miejscu.</p>
-          <a class="button" href="#oferta">Sprawdź ofertę</a>
+          <div class="hero-actions">
+            <a class="button" href="#oferta">Sprawdź ofertę</a>
+            <a class="hero-gallery-link" href="#galeria">Zobacz zdjęcia</a>
+          </div>
         </div>
         <figure class="hero-photo">
           <Picture src={saunaExterior} formats={['webp']} fallbackFormat="png" width={1440} widths={[560, 800, 1080, 1440]}
@@ -150,9 +153,13 @@ const rentalPrices = [
     </main>
 
     <footer class="frame site-footer">
-      <span>Mobilne Saunowanie · Swarzewo</span>
-      <a class="footer-privacy" href="/przetwarzanie-danych/">Dane przy rezerwacji</a>
-      <ProfileLinks />
+      <div class="footer-main">
+        <span>Mobilne Saunowanie · Swarzewo</span>
+        <ProfileLinks />
+      </div>
+      <div class="footer-legal">
+        <a class="footer-privacy" href="/przetwarzanie-danych/">Dane przy rezerwacji</a>
+      </div>
     </footer>
 
     <a class="mobile-contact" href="#kontakt">Kontakt</a>
