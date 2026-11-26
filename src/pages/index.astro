@@ -14,7 +14,9 @@ import Gallery from '../components/Gallery.astro';
 const canonical = Astro.site && new URL(Astro.url.pathname, Astro.site);
 const contactNumber = canonical ? import.meta.env.BOOKING_PHONE?.trim() || '' : '';
 const phoneDigits = contactNumber.replace(/[^\d+]/g, '');
-const phoneHref = /^\+48\d{9}$/.test(phoneDigits) ? `tel:${phoneDigits}` : '';
+const phoneParts = phoneDigits.match(/^\+48(\d{3})(\d{3})(\d{3})$/);
+const phoneHref = phoneParts ? `tel:${phoneDigits}` : '';
+const phoneLabel = phoneParts ? `(+48) ${phoneParts.slice(1).join(' ')}` : '(+48) XXX XXX XXX';
 if (canonical && !phoneHref) throw new Error('Set BOOKING_PHONE to a public Polish booking number with the +48 prefix.');
 
 const title = 'Mobilna sauna z dowozem | Swarzewo, Puck, Władysławowo';
@@ -139,7 +141,7 @@ const rentalPrices = [
           <p>{phoneHref ? 'Zadzwoń i podaj termin oraz miejscowość. Ustalimy dostępność i szczegóły dowozu.' : 'Przykładowy wygląd przycisku kontaktu.'}</p>
           <a class="button contact-button" href={phoneHref || undefined}>
             <span>Zadzwoń</span>
-            <span class="contact-number">{phoneHref ? contactNumber : '+48 XXX XXX XXX'}</span>
+            <span class="contact-number">{phoneLabel}</span>
           </a>
         </div>
       </section>
