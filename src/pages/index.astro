@@ -9,6 +9,7 @@ import socialPhoto from '../assets/sauna-z-dowozem-refleks.png';
 import deliveryMap from '../assets/mapa-dowozu.jpg';
 import logo from '../assets/logo-mobilna-sauna.png';
 import Gallery from '../components/Gallery.astro';
+import ProfileLinks from '../components/ProfileLinks.astro';
 
 
 const canonical = Astro.site && new URL(Astro.url.pathname, Astro.site);
@@ -67,6 +68,7 @@ const rentalPrices = [
         <a href="#oferta">Oferta</a>
         <a href="#galeria">Galeria</a>
         <a class="nav-contact" href="#kontakt">Kontakt</a>
+        <ProfileLinks />
       </nav>
     </header>
 
@@ -150,6 +152,7 @@ const rentalPrices = [
     <footer class="frame site-footer">
       <span>Mobilne Saunowanie · Swarzewo</span>
       <a class="footer-privacy" href="/przetwarzanie-danych/">Dane przy rezerwacji</a>
+      <ProfileLinks />
     </footer>
 
     <a class="mobile-contact" href="#kontakt">Kontakt</a>

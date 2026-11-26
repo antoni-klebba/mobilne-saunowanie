@@ -1,0 +1,40 @@
+<div class="profile-links">
+  <a href="https://www.instagram.com/mobilne_saunowanie/" aria-label="Mobilne Saunowanie na Instagramie" title="Instagram">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1.15" fill="currentColor" stroke="none" />
+    </svg>
+  </a>
+  <a href="https://maps.app.goo.gl/BmCvYhncT8WKBKjg6" aria-label="Mobilne Saunowanie w Mapach Google" title="Mapy Google">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M19.5 10c0 5-7.5 11.5-7.5 11.5S4.5 15 4.5 10a7.5 7.5 0 1 1 15 0Z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  </a>
+</div>
+
+<style>
+  .profile-links { display: inline-flex; align-items: center; }
+  .profile-links a {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--forest);
+    border-radius: 3px;
+  }
+  .profile-links a:is(:hover, :focus-visible) { color: var(--copper); }
+  svg {
+    width: 33px;
+    height: 33px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+  }
+  :global(.site-footer) svg {
+    width: 22px;
+    height: 22px;
+  }
+</style>
